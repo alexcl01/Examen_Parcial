@@ -1,4 +1,3 @@
-// element.remove() polyfill
 if (typeof Element !== "undefined" && !("remove" in Element.prototype)) {
   Element.prototype["remove"] = function () {
     if (this.parentNode) {
@@ -7,17 +6,7 @@ if (typeof Element !== "undefined" && !("remove" in Element.prototype)) {
   };
 }
 
-/*
- * classList.js: Cross-browser full element.classList implementation.
- * 1.2.20171210
- *
- * By Eli Grey, http://eligrey.com
- * License: Dedicated to the public domain.
- *   See https://github.com/eligrey/classList.js/blob/master/LICENSE.md
- */
 if (typeof self !== "undefined" && "document" in self) {
-  // Full polyfill for browsers with no classList support
-  // Including IE < Edge missing SVGElement.classList
   if (
     !("classList" in document.createElement("_")) ||
     (document.createElementNS &&
@@ -52,7 +41,6 @@ if (typeof self !== "undefined" && "document" in self) {
             }
             return -1;
           },
-        // Vendors: please allow content code to instantiate DOMExceptions
         DOMEx = function (type, message) {
           this.name = type;
           this.code = DOMException[type];
@@ -86,8 +74,7 @@ if (typeof self !== "undefined" && "document" in self) {
         classListGetter = function () {
           return new ClassList(this);
         };
-      // Most DOMException implementations don't allow calling DOMException's toString()
-      // on non-DOMExceptions. Error's toString() is sufficient here.
+
       DOMEx[protoProp] = Error[protoProp];
       classListProto.item = function (i) {
         return this[i] || null;
@@ -169,9 +156,7 @@ if (typeof self !== "undefined" && "document" in self) {
         try {
           objCtr.defineProperty(elemCtrProto, classListProp, classListPropDesc);
         } catch (ex) {
-          // IE 8 doesn't support enumerable:true
-          // adding undefined to fight this issue https://github.com/eligrey/classList.js/issues/36
-          // modernie IE8-MSW7 machine has IE8 8.0.6001.18702 and is affected
+
           if (ex.number === undefined || ex.number === -0x7ff5ec54) {
             classListPropDesc.enumerable = false;
             objCtr.defineProperty(
@@ -187,9 +172,6 @@ if (typeof self !== "undefined" && "document" in self) {
     })(self);
   }
 
-  // There is full or partial native classList support, so just check if we need
-  // to normalize the add/remove and toggle APIs.
-
   (function () {
     "use strict";
 
@@ -197,8 +179,6 @@ if (typeof self !== "undefined" && "document" in self) {
 
     testElement.classList.add("c1", "c2");
 
-    // Polyfill for IE 10/11 and Firefox <26, where classList.add and
-    // classList.remove exist but support only one argument at a time.
     if (!testElement.classList.contains("c2")) {
       var createMethod = function (method) {
         var original = DOMTokenList.prototype[method];
@@ -219,8 +199,6 @@ if (typeof self !== "undefined" && "document" in self) {
 
     testElement.classList.toggle("c3", false);
 
-    // Polyfill for IE 10 and Firefox <24, where classList.toggle does not
-    // support the second argument.
     if (testElement.classList.contains("c3")) {
       var _toggle = DOMTokenList.prototype.toggle;
 
@@ -233,7 +211,6 @@ if (typeof self !== "undefined" && "document" in self) {
       };
     }
 
-    // replace() polyfill
     if (!("replace" in document.createElement("_").classList)) {
       DOMTokenList.prototype.replace = function (token, replacement_token) {
         var tokens = this.toString().split(" "),

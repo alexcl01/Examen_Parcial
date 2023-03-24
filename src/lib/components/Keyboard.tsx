@@ -1,4 +1,4 @@
-import * as React from "react";
+  import * as React from "react";
 import Keyboard from "simple-keyboard";
 import { parseProps, changedProps } from "../services/Utilities";
 import "simple-keyboard/build/css/index.css";
@@ -14,9 +14,6 @@ const KeyboardReact = (props: KeyboardReactInterface["options"]) => {
   React.useEffect(() => {
     const parsedProps = parseProps(props) as any;
 
-    /**
-     * Initialize simple-keyboard
-     */
     if (!initRef.current) {
       initRef.current = true;
       parsedProps.debug && console.log("ReactSimpleKeyboard: Init");
@@ -25,15 +22,12 @@ const KeyboardReact = (props: KeyboardReactInterface["options"]) => {
       keyboardRef.current = new Keyboard(
         targetElem || targetClass,
         parsedProps
-      ) as KeyboardReactInterface;
+      ) as unknown as KeyboardReactInterface;
       parsedProps.keyboardRef && parsedProps.keyboardRef(keyboardRef.current);
     }
 
     const updatedProps = changedProps(previousProps.current, parsedProps);
 
-    /**
-     * Only trigger render if props changed
-     */
     if (updatedProps.length) {
       const keyboard = keyboardRef.current;
       previousProps.current = parsedProps;

@@ -17,9 +17,6 @@ class App extends React.Component {
   onKeyPress = (button) => {
     console.log("Button pressed", button);
 
-    /**
-     * Shift functionality
-     */
     if (["{capslock}", "{shiftleft}", "{shiftright}"].includes(button))
       this.handleShiftButton();
   };
